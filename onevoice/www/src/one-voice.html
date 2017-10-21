@@ -69,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <app-header slot="header" condenses reveals effects="waterfall">
         <app-toolbar>
-          <img src="images/logo.svg" class="logo"></img>
+          <img src="img/logo.svg" class="logo"></img>
           <div main-title>Voice</div>
         </app-toolbar>
       </app-header>
@@ -77,10 +77,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <iron-pages
           selected="[[page]]"
           attr-for-selected="name"
-          fallback-selection="view404"
+          fallback-selection="main"
           role="main">
         <onevoice-main name="main"></onevoice-main>
-        <my-view404 name="view404"></my-view404>
       </iron-pages>
     </app-header-layout>
   </template>
@@ -127,7 +126,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _showPage404() {
-        this.page = 'view404';
+        this.page = 'main';
       }
     }
 
