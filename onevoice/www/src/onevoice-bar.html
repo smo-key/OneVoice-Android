@@ -5,11 +5,34 @@
   <template>
     <style include="shared-styles">
       :host {
+        left: 0;
+        right: 0;
         display: block;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        height: 66px;
+        color: var(message-entry-light);
+
+      }
+      paper-input{
+        position: relative;
+        top: -6px;
+        padding-left: 15px;
+        height: 66px;
+        --paper-input-container-underline: {
+          border-color: transparent;
+        };
+        --paper-input-container-underline-focus:{
+          border-color: transparent;
+        };
+
       }
     </style>
 
-    TEST!
+    <paper-input placeholder="Enter Message">
+    </paper-input>
 
   </template>
 
