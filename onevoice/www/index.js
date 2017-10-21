@@ -4,7 +4,7 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         if (window.cordova)
         {
-            window.open("file:///android_asset/www/index.html#view1", "_self");
+            window.open("file:///android_asset/www/index.html#main", "_self");
         } else {
           //window.location.href = "#view1";
         }

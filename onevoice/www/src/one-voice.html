@@ -69,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <app-header slot="header" condenses reveals effects="waterfall">
         <app-toolbar>
-          <img src="../images/logo.svg" class="logo"></img>
+          <img src="images/logo.svg" class="logo"></img>
           <div main-title>Voice</div>
         </app-toolbar>
       </app-header>
@@ -79,9 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           attr-for-selected="name"
           fallback-selection="view404"
           role="main">
-        <my-view1 name="view1"></my-view1>
-        <my-view2 name="view2"></my-view2>
-        <my-view3 name="view3"></my-view3>
+        <onevoice-main name="main"></onevoice-main>
         <my-view404 name="view404"></my-view404>
       </iron-pages>
     </app-header-layout>
@@ -115,12 +113,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
-        this.page = page || 'view1';
+        this.page = page || 'main';
       }
 
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        var resolvedPageUrl = this.resolveUrl('onevoice-' + page + '.html');
         Polymer.importHref(
             resolvedPageUrl,
             null,
