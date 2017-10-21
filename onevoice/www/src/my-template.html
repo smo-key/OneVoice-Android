@@ -1,0 +1,23 @@
+<link rel="import" href="../lib/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-template">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    Content
+
+  </template>
+
+  <script>
+    class MyTemplate extends Polymer.Element {
+      static get is() { return 'my-template'; }
+    }
+
+    window.customElements.define(MyTemplate.is, MyTemplate);
+  </script>
+</dom-module>

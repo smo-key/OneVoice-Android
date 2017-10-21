@@ -1,6 +1,7 @@
 <link rel="import" href="../lib/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="onevoice-bar.html">
+<link rel="import" href="onevoice-message.html">
 
 <dom-module id="onevoice-main">
   <template>
@@ -8,10 +9,18 @@
       :host {
         display: block;
         padding: 10px;
+        background-color: var(--background-color);
+        height: calc(100vh - 84px);
+        @apply --layout-vertical;
+        @apply --layout-justified;
       }
     </style>
 
-
+    <div class="messages">
+      <template is="dom-repeat" items="{{messages}}" as="message">
+        <onevoice-message message="{{message}}"></onevoice-message>
+      </template>
+    </div>
 
     <onevoice-bar></onevoice-bar>
 
@@ -20,6 +29,20 @@
   <script>
     class OnevoiceMain extends Polymer.Element {
       static get is() { return 'onevoice-main'; }
+
+      static get properties() {
+        return {
+          messages: { type: Array, value: [
+            { from: "bot", icon: "mdi:emoticon-happy",
+              text: "What are you looking for?",
+              optionsHead: "Try:", options: [
+              { text: "Upgrade my phone plan", action: "reply" },
+              { text: "Gift for a friend", action: "reply" },
+              { text: "Good movies", action: "reply" }
+            ]}
+          ]}
+        }
+      }
     }
 
     window.customElements.define(OnevoiceMain.is, OnevoiceMain);

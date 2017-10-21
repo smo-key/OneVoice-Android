@@ -1,0 +1,66 @@
+<link rel="import" href="../lib/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="onevoice-message">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        @apply --font-main;
+        font-size: 18px;
+      }
+      div.message-container {
+        border-radius: 8px 8px 8px 0;
+        @apply --shadow-elevation-4dp;
+        width: calc(100% - 64px);
+      }
+      div.message {
+        position: relative;
+        top: 0;
+        left: 0;
+        background-color: white;
+        color: var(--primary-color);
+        border-radius: 8px 8px 8px 0;
+        border: 1px solid var(--paper-grey-500);
+        padding: 8px;
+      }
+      div.options {
+        background-color: var(--paper-grey-200);
+        color: var(--primary-color);
+        border: 1px solid var(--paper-grey-500);
+        border-top: 0;
+        padding: 8px;
+        margin-top: -8px;
+        /*position: absolute;*/
+      }
+      div.options > span.head {
+        color: var(--grey-text);
+      }
+    </style>
+
+    <div class="message-container">
+      <div class="message">
+        [[message.text]]
+      </div>
+      <div class="options">
+        <span class="head">[[message.optionsHead]]</span>
+      </div>
+    </div>
+
+
+  </template>
+
+  <script>
+    class OnevoiceMessage extends Polymer.Element {
+      static get is() { return 'onevoice-message'; }
+
+      static get properties() {
+        return {
+          message: { type: Object, reflectToAttribute: true }
+        }
+      }
+    }
+
+    window.customElements.define(OnevoiceMessage.is, OnevoiceMessage);
+  </script>
+</dom-module>
