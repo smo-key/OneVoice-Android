@@ -2,7 +2,12 @@ var app = {
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-        window.open("file:///android_asset/www/index.html#view1", "_self");
+        if (window.cordova)
+        {
+            window.open("file:///android_asset/www/index.html#view1", "_self");
+        } else {
+          //window.location.href = "#view1";
+        }
     },
 
     // deviceready Event Handler
@@ -11,7 +16,6 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
-
     },
 
     // Update DOM on a Received Event

@@ -8,12 +8,23 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../lib/polymer/polymer-element.html">
 
 <!-- shared styles for all views -->
 <dom-module id="shared-styles">
   <template>
     <style>
+      :host {
+        --primary-color: var(--paper-indigo-700);
+        --app-primary-color: var(--primary-color);
+      }
+
+      app-header {
+        background-color: var(--primary-color);
+        --app-header-background-front-layer: { background-color: var(--primary-color) };
+        --app-header-background-rear-layer: { background-color: var(--primary-color) };
+      }
+
       .card {
         margin: 24px;
         padding: 16px;
