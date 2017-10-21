@@ -8,31 +8,34 @@
         left: 0;
         right: 0;
         display: block;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
         background-color: white;
         height: 66px;
         color: var(message-entry-light);
-
+        @apply --layout-horizontal;
+        @apply --layout-justified;
+        @apply --layout-center;
+        padding: 0 15px;
       }
-      paper-input{
+
+      paper-input {
         position: relative;
         top: -6px;
-        padding-left: 15px;
         height: 66px;
         --paper-input-container-underline: {
           border-color: transparent;
         };
-        --paper-input-container-underline-focus:{
+        --paper-input-container-underline-focus: {
           border-color: transparent;
         };
-
       }
+
     </style>
 
     <paper-input placeholder="Enter Message">
     </paper-input>
+    <div class="right">
+      Test
+    </div>
 
   </template>
 
