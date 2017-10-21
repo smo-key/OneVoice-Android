@@ -1,27 +1,23 @@
 <link rel="import" href="../lib/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
-<link rel="import" href="onevoice-bar.html">
 
-<dom-module id="my-view1">
+<dom-module id="onevoice-bar">
   <template>
     <style include="shared-styles">
       :host {
         display: block;
-        padding: 10px;
       }
     </style>
 
     TEST!
 
-    <onevoice-bar></onevoice-bar>
-
   </template>
 
   <script>
-    class MyView1 extends Polymer.Element {
-      static get is() { return 'my-view1'; }
+    class OnevoiceBar extends Polymer.Element {
+      static get is() { return 'onevoice-bar'; }
     }
 
-    window.customElements.define(MyView1.is, MyView1);
+    window.customElements.define(OnevoiceBar.is, OnevoiceBar);
   </script>
 </dom-module>
