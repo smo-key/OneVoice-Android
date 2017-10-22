@@ -11,10 +11,6 @@
         background-color: white;
         height: 66px;
         color: var(message-entry-light);
-        @apply --layout-horizontal;
-        @apply --layout-justified;
-        @apply --layout-center;
-        padding: 0 15px;
       }
 
       paper-input {
@@ -29,12 +25,62 @@
         };
       }
 
+      paper-icon-button {
+        color: var(--primary-color);
+        margin-left: 6px;
+        padding: 6px;
+        width: 42px;
+        height: 42px;
+        --paper-icon-button-ink-color: var(--primary-color);
+      }
+
+      paper-icon-button.send {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        padding-right: 8px;
+        --paper-icon-button-ink-color: white;
+      }
+
+      paper-icon-button.micoff {
+        color: white;
+        --paper-icon-button-ink-color: white;
+      }
+
+      div.bar-container {
+        @apply --layout-horizontal;
+        @apply --layout-justified;
+        @apply --layout-center;
+        padding: 0 15px;
+        height: 66px;
+      }
+
+      div.bar-container.listening {
+        background-color: var(--primary-color);
+        color: white;
+      }
+      div.bar-container.listening div.text {
+        opacity: 0.9;
+      }
+      div.bar-container.listening span.parsing {
+        opacity: 0.7;
+      }
+
     </style>
 
-    <paper-input placeholder="Enter Message">
-    </paper-input>
-    <div class="right">
-      Test
+    <div class="bar-container" hidden$="[[listening]]">
+      <paper-input placeholder="Enter Message">
+      </paper-input>
+      <div class="right">
+        <paper-icon-button icon="mdi:microphone" on-tap="_changeListen"></paper-icon-button>
+        <paper-icon-button icon="mdi:telegram" class="send"></paper-icon-button>
+      </div>
+    </div>
+    <div class="bar-container listening" hidden$="[[!listening]]">
+      <div class="text">[[text]] <span class="parsing">[[textParsing]]</span></div>
+      <div class="right">
+        <paper-icon-button class="micoff" icon="mdi:microphone-off" on-tap="_changeListen"></paper-icon-button>
+      </div>
     </div>
 
   </template>
@@ -42,6 +88,18 @@
   <script>
     class OnevoiceBar extends Polymer.Element {
       static get is() { return 'onevoice-bar'; }
+
+      static get properties() {
+        return {
+          listening: { type: Boolean, value: false },
+          text: { type: String, value: "I want a new" },
+          textParsing: { type: String, value: "⠖⠗⠹" }
+        }
+      }
+
+      _changeListen() {
+        this.listening = !this.listening;
+      }
     }
 
     window.customElements.define(OnevoiceBar.is, OnevoiceBar);
