@@ -32,11 +32,17 @@
         position: relative;
         top: 0;
         left: 0;
-        background-color: white;
-        color: var(--primary-color);
         border-radius: 8px 8px 8px 0;
         border: 1px solid var(--paper-grey-500);
         padding: 8px;
+      }
+      div.message.bot{
+        color: var(--primary-color);
+        background-color: white;
+      }
+       div.message.user{
+        background-color: var(--primary-color);
+        color: white;
       }
       div.options {
         background-color: var(--paper-grey-200);
@@ -50,12 +56,14 @@
       div.options > span.head {
         color: var(--grey-text);
       }
+
+      }
     </style>
     <div class="emote">
-      <paper-icon-button icon="mdi:emoticon-happy" ></paper-icon-button>
+      <paper-icon-button icon="[[message.icon]]" ></paper-icon-button>
     </div>
     <div class="message-container">
-      <div class="message">
+      <div class="message user">
         [[message.text]]
       </div>
       <div class="options">
