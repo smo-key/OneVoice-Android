@@ -63,17 +63,17 @@
         opacity: 0.9;
       }
       div.bar-container.listening span.parsing {
-        opacity: 0.7;
+        opacity: 0.8;
       }
 
     </style>
 
     <div class="bar-container" hidden$="[[listening]]">
-      <paper-input placeholder="Enter Message">
+      <paper-input placeholder="Enter Message" value="{{text}}" on-keypress="_keyPressed">
       </paper-input>
       <div class="right">
         <paper-icon-button icon="mdi:microphone" on-tap="_changeListen"></paper-icon-button>
-        <paper-icon-button icon="mdi:telegram" class="send"></paper-icon-button>
+        <paper-icon-button icon="mdi:telegram" class="send" on-tap="_submitSend"></paper-icon-button>
       </div>
     </div>
     <div class="bar-container listening" hidden$="[[!listening]]">
@@ -99,6 +99,22 @@
         }
       }
 
+      _keyPressed(e) {
+        if (13 === e.charCode) {
+          this._submitSend();
+        }
+      }
+
+      _submitSend() {
+        this._send(this.text);
+      }
+
+      _send(text) {
+        this.text = "";
+        if (text.length > 0)
+          this.dispatchEvent(new CustomEvent('send-text', {detail: text, bubbles: true, composed: true}));
+      }
+
       ready() {
         super.ready();
         console.log("ready");
@@ -108,7 +124,7 @@
           recognition.requestPermission()
           .then(
             () => console.log('Granted'),
-            () => alert("DENIED")
+            () => alert("Permission denied.")
           );
         } else {
           recognition = new webkitSpeechRecognition();
@@ -150,8 +166,8 @@
       }
 
       _parseCordovaResult(matches) {
-        //alert(matches[0]);
         this._updateText(matches[0], "");
+        this._send(matches[0]);
       }
 
       _braille(text) {
@@ -181,15 +197,19 @@
             var txt = "     ";
             var length = 0;
             self._updateText("", self._braille(txt));
-            var interval = setInterval(() => {
-              length++;
-              if (length % 4 == 0) txt += " ";
-              self._updateText("", self._braille(txt));
+            setInterval(() => {
+              if (self.get("listening")) {
+                length++;
+                if (length % 4 == 0) txt += " ";
+                self._updateText("", self._braille(txt));
+              } else {
+                txt = "     ";
+                length = 0;
+              }
             }, 200);
             recognition.startListening((matches) => {
-               txt = "";
-               clearInterval(interval);
-               self._parseCordovaResult(matches);
+              self._parseCordovaResult(matches);
+              self.set("listening", false);
              }, (error) => {
                txt = "";
              }, { language: "en-US", showPopup: false })

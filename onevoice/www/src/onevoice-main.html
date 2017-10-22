@@ -37,20 +37,43 @@
       static get properties() {
         return {
           messages: { type: Array, value: [
-            { from: "bot", icon: "mdi:emoticon-happy",
-              text: "What are you looking for?",
-              options: [
-              "Upgrade my phone plan",
-              "Gift for a friend",
-              "Good movies"
-            ]},
-            { from: "user",
-              text: "I want pie"
-            },
-            { from: "bot", icon: "mdi:emoticon-sad",
-              text: "I don't know what you're blabbing about."},
+            // { from: "bot", icon: "mdi:emoticon-happy",
+            //   text: "What are you looking for?",
+            //   options: [
+            //   "Upgrade my phone plan",
+            //   "Gift for a friend",
+            //   "Good movies"
+            // ]},
+            // { from: "user",
+            //   text: "I want pie"
+            // },
+            // { from: "bot", icon: "mdi:emoticon-sad",
+            //   text: "I don't know what you're blabbing about."},
           ]}
         }
+      }
+
+      ready() {
+        super.ready();
+        this.addEventListener('send-text', e => { console.log(e); this._sendText(e.detail) });
+      }
+
+      _sendText(text) {
+        var message = {
+          from: "user",
+          text: text
+        }
+        console.log(message);
+        if (this.messages.length > 0) {
+          var data = this.messages[this.messages.length - 1];
+          data.options = [ ];
+          this.pop("messages");
+          this.push("messages", data);
+        }
+
+        this.push("messages", message);
+
+        
       }
     }
 
