@@ -86,19 +86,125 @@
   </template>
 
   <script>
+    var recognition;
+
     class OnevoiceBar extends Polymer.Element {
       static get is() { return 'onevoice-bar'; }
 
       static get properties() {
         return {
           listening: { type: Boolean, value: false },
-          text: { type: String, value: "I want a new" },
-          textParsing: { type: String, value: "⠖⠗⠹" }
+          text: { type: String, value: "" },
+          textParsing: { type: String, value: "" }
         }
       }
 
+      ready() {
+        super.ready();
+        console.log("ready");
+
+        if (window.cordova) {
+          recognition = window.plugins.speechRecognition;
+          recognition.requestPermission()
+          .then(
+            () => console.log('Granted'),
+            () => alert("DENIED")
+          );
+        } else {
+          recognition = new webkitSpeechRecognition();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = "en-US";
+        }
+
+        console.log(recognition);
+        var self = this;
+
+        if (!window.cordova) {
+          recognition.onresult = this._parserResult;
+          recognition.onerror = function(event) { console.error(error); }
+          recognition.onend = function() {
+            // recognition.start();
+          };
+        }
+      }
+
+      _parseResult(e) {
+        console.log(e);
+        var text = "";
+        var textParsing = "";
+        for (var i = e.resultIndex; i < e.results.length; ++i) {
+          if (e.results[i].isFinal) {
+            text += e.results[i][0].transcript;
+          } else {
+            if (i == e.results.length - 1) {
+              textParsing += self._braille(e.results[i][0].transcript);
+            } else {
+              textParsing += e.results[i][0].transcript;
+            }
+          }
+        }
+        setTimeout(() => {
+          self._updateText(text, textParsing);
+        }, 250);
+      }
+
+      _parseCordovaResult(matches) {
+        //alert(matches[0]);
+        this._updateText(matches[0], "");
+      }
+
+      _braille(text) {
+        if (text.length > 10) return text;
+        var output = "";
+        var braille = "⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟⠠⠡⠢⠣⠤⠥⠦⠧⠨⠩⠪⠫⠬⠭⠮⠯⠰⠱⠲⠳⠴⠵⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿";
+        for ( var i = 0; i < text.length; i++ ) {
+          output += braille.charAt(Math.floor(Math.random()*braille.length));
+        }
+        return output;
+      }
+
+      _updateText(t, tp) {
+        this.set("text", t);
+        this.set("textParsing", tp);
+      }
+
+      _done() {
+        this.listening = false;
+      }
+
       _changeListen() {
+        var self = this;
         this.listening = !this.listening;
+        if (this.listening) {
+          if (window.cordova) {
+            var txt = "hello";
+            var length = 0;
+            self._updateText("", self._braille(txt));
+            var interval = setInterval(() => {
+              length++;
+              if (length % 4 == 0) txt += "x";
+              self._updateText("", self._braille(txt));
+            }, 200);
+            recognition.startListening((matches) => {
+               txt = "";
+               clearInterval(interval);
+               self._parseCordovaResult(matches);
+             }, (error) => {
+               txt = "";
+             }, { language: "en-US", showPopup: false })
+          } else {
+            recognition.start();
+          }
+
+        } else if (!this.listening) {
+          this.text = "";
+          if (window.cordova) {
+            recognition.stopListening(() => { }, (error) => { alert(error); });
+          } else {
+            recognition.stop();
+          }
+        }
       }
     }
 
