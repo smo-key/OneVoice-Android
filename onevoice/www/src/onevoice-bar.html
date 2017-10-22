@@ -108,7 +108,7 @@
 
       static get properties() {
         return {
-          listening: { type: Boolean, value: false },
+          listening: { type: Boolean, value: false, notify: true, reflectToAttribute: true },
           text: { type: String, value: "" },
           textParsing: { type: String, value: "" }
         }

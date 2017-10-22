@@ -43,6 +43,7 @@
       static get properties() {
         return {
           loading: { type: Boolean, value: false },
+          listening: { type: Boolean, value: false },
           messages: { type: Array, value: [
             { from: "bot", icon: "mdi:emoticon-happy",
               text: "What are you looking for?",
@@ -63,6 +64,24 @@
         super.ready();
         this.addEventListener('send-text', e => { console.log(e); this._sendText(e.detail) });
         console.log(window.AWS);
+      }
+
+      _respondTTS(text) {
+        var self = this;
+        if (window.cordova) {
+          TTS
+          .speak({
+              text: text,
+              locale: 'en-US',
+              rate: 1
+          }, function () {
+            self.set("loading", false);
+            self.set("listening", true);
+          }, function (reason) {
+            alert(reason);
+            self.set("loading", false);
+          });
+        }
       }
 
       _sendMessageAWS(text) {
@@ -88,19 +107,18 @@
         lexruntime.postContent(params, function (err, data) {
           if (err) {
             console.error(err);
-            self.set("loading", false);
             self.push("messages", {
               from: "bot",
               icon: "mdi:emoticon-sad",
               text: "Sorry, I didn't understand that. Try asking something else."
             });
+            self._respondTTS("Sorry, I didn't understand that. Try asking something else.");
             setTimeout(() => {
               console.log(div);
               div.scrollTop = 50000;
             }, 500);
           }
           else {
-            self.set("loading", false);
             console.log(data);
             var msgRegex = /For example|Try/;
             var text = data.message.split(msgRegex)[0];
@@ -128,6 +146,7 @@
               text: text,
               options: options
             });
+            self._respondTTS(text);
             setTimeout(() => {
               console.log(div);
               div.scrollTop = 50000;
