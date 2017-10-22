@@ -178,12 +178,12 @@
         this.listening = !this.listening;
         if (this.listening) {
           if (window.cordova) {
-            var txt = "hello";
+            var txt = "     ";
             var length = 0;
             self._updateText("", self._braille(txt));
             var interval = setInterval(() => {
               length++;
-              if (length % 4 == 0) txt += "x";
+              if (length % 4 == 0) txt += " ";
               self._updateText("", self._braille(txt));
             }, 200);
             recognition.startListening((matches) => {

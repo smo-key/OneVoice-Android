@@ -8,70 +8,95 @@
         display: block;
         @apply --font-main;
         font-size: 18px;
+      }
+      div.main-container {
         @apply --layout-horizontal;
         @apply --layout-start-justified;
       }
+      div.main-container.user {
+        @apply --layout-end-justified;
+      }
       div.emote {
         color: var(--primary-color);
-        border-radius: 50%;
-        background-color: : white;
-        
+        margin-right: 12px;
       }
-      paper-icon-button{
-        height: 60px;
-        width: 60px;
+      iron-icon {
+        height: 36px;
+        width: 36px;
+        position: relative;
+        top: 14px;
+        background-color: white;
+        border-radius: 50%;
       }
 
       div.message-container {
         border-radius: 8px 8px 8px 0;
-        @apply --shadow-elevation-4dp;
         width: calc(100% - 84px);
-        margin-top: 8px;
+        margin: 8px 0;
+      }
+      div.message-container.bot[options] {
+        @apply --shadow-elevation-4dp;
+      }
+      div.message-container.user {
+        border-radius: 8px 8px 0 8px;
       }
       div.message {
         position: relative;
-        top: 0;
-        left: 0;
         border-radius: 8px 8px 8px 0;
-        border: 1px solid var(--paper-grey-500);
-        padding: 8px;
+        border: 2px solid var(--paper-grey-500);
+        padding: 8px 15px;
       }
-      div.message.bot{
-        color: var(--primary-color);
-        background-color: white;
-      }
-       div.message.user{
+      div.message.user {
         background-color: var(--primary-color);
         color: white;
+        border-radius: 8px 8px 0 8px;
+        border: 0;
+      }
+      div.message[options] {
+        border-radius: 8px 8px 0 0;
+        border-bottom: 0;
+      }
+      div.message.bot {
+        color: var(--primary-color);
+        background-color: white;
       }
       div.options {
         background-color: var(--paper-grey-200);
         color: var(--primary-color);
-        border: 1px solid var(--paper-grey-500);
+        border: 2px solid var(--paper-grey-500);
         border-top: 0;
-        padding: 8px;
+        padding: 15px;
         margin-top: -8px;
         /*position: absolute;*/
+        @apply --layout-vertical;
+        font-size: 16px;
+      }
+      div.options > span {
+        padding: 1px 0;
       }
       div.options > span.head {
         color: var(--grey-text);
+        padding-top: 6px;
+        /*font-size: 18px;*/
       }
 
-      }
     </style>
-    <div class="emote">
-      <paper-icon-button icon="[[message.icon]]" ></paper-icon-button>
-    </div>
-    <div class="message-container">
-      <div class$="message [[message.from]]">
-        [[message.text]]
+    <div class$="main-container [[message.from]]">
+      <div class="emote" hidden$="[[_isUserMessage(message.from)]]">
+        <iron-icon icon="[[message.icon]]"></iron-icon>
       </div>
-      <div class="options">
-        <span class="head">[[message.optionsHead]]</span>
+      <div class$="message-container [[message.from]]" options$="[[_hasItemsArray(message.options)]]">
+        <div class$="message [[message.from]]" options$="[[_hasItemsArray(message.options)]]">
+          [[message.text]]
+        </div>
+        <div class="options" hidden$="[[!_hasItemsArray(message.options)]]">
+          <span class="head">Try:</span>
+          <template is="dom-repeat" items="[[message.options]]" as="option">
+            <span>[[option]]</span>
+          </template>
+        </div>
       </div>
     </div>
-
-
   </template>
 
   <script>
@@ -82,6 +107,16 @@
         return {
           message: { type: Object, reflectToAttribute: true }
         }
+      }
+
+      _hasItemsArray(obj) {
+        return !!obj && obj.length > 0;
+      }
+      _isBotMessage(from) {
+        return from === "bot";
+      }
+      _isUserMessage(from) {
+        return from === "user";
       }
     }
 

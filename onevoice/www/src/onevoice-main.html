@@ -14,6 +14,10 @@
         @apply --layout-vertical;
         @apply --layout-justified;
       }
+      div.messages {
+        display: block;
+        padding: 15px;
+      }
     </style>
 
     <div class="messages">
@@ -35,11 +39,16 @@
           messages: { type: Array, value: [
             { from: "bot", icon: "mdi:emoticon-happy",
               text: "What are you looking for?",
-              optionsHead: "Try:", options: [
-              { text: "Upgrade my phone plan", action: "reply" },
-              { text: "Gift for a friend", action: "reply" },
-              { text: "Good movies", action: "reply" }
-            ]}
+              options: [
+              "Upgrade my phone plan",
+              "Gift for a friend",
+              "Good movies"
+            ]},
+            { from: "user",
+              text: "I want pie"
+            },
+            { from: "bot", icon: "mdi:emoticon-sad",
+              text: "I don't know what you're blabbing about."},
           ]}
         }
       }
