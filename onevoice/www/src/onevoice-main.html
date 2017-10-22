@@ -26,7 +26,7 @@
       </template>
     </div>
 
-    <onevoice-bar></onevoice-bar>
+    <onevoice-bar loading="{{loading}}"></onevoice-bar>
 
   </template>
 
@@ -36,14 +36,15 @@
 
       static get properties() {
         return {
+          loading: { type: Boolean, value: false },
           messages: { type: Array, value: [
-            // { from: "bot", icon: "mdi:emoticon-happy",
-            //   text: "What are you looking for?",
-            //   options: [
-            //   "Upgrade my phone plan",
-            //   "Gift for a friend",
-            //   "Good movies"
-            // ]},
+            { from: "bot", icon: "mdi:emoticon-happy",
+              text: "What are you looking for?",
+              options: [
+              "Upgrade my phone plan",
+              "Gift for a friend",
+              "Good movies"
+            ]},
             // { from: "user",
             //   text: "I want pie"
             // },
@@ -56,6 +57,69 @@
       ready() {
         super.ready();
         this.addEventListener('send-text', e => { console.log(e); this._sendText(e.detail) });
+        console.log(window.AWS);
+      }
+
+      _sendMessageAWS(text) {
+        this.loading = true;
+        var self = this;
+
+        var lexruntime = new AWS.LexRuntime({
+        	region: 'us-east-1',
+        	accessKeyId: 'AKIAJJLBJB5OYWRYALPQ',
+        	secretAccessKey: '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'
+        });
+
+        var params = {
+          botAlias: 'OVBot', /* required */
+          botName: 'OneVoice', /* required */
+          contentType: 'text/plain; charset=utf-8', /* required */
+          inputStream: text, /* required */
+          userId: 'harsh1234', /* required */
+          accept: 'text/plain; charset=utf-8'
+        };
+
+        lexruntime.postContent(params, function (err, data) {
+          if (err) {
+            console.error(err);
+            self.set("loading", false);
+            self.push("messages", {
+              from: "bot",
+              icon: "mdi:emoticon-sad",
+              text: "Sorry, can you repeat that?"
+            });
+          }
+          else {
+            self.set("loading", false);
+            console.log(data);
+            var msgRegex = /For example|Try/;
+            var text = data.message.split(msgRegex)[0];
+            console.log(text);
+            var opts = data.message.substring(text.length);
+            var optRegex = /'[\w\d\s]{2,}'/;
+
+            var m;
+            var options = [ ];
+
+            do {
+                m = optRegex.exec(opts);
+                if (m) {
+                  console.log(m[0], opts)
+                  options.push(m[0].substring(1, m[0].length - 1))
+                  opts = opts.replace(m[0], "");
+                }
+            } while (m);
+
+            //var text = data.message.
+
+            self.push("messages", {
+              from: "bot",
+              icon: "mdi:emoticon-sad",
+              text: text,
+              options: options
+            });
+          }
+        });
       }
 
       _sendText(text) {
@@ -71,9 +135,8 @@
           this.push("messages", data);
         }
 
+        this._sendMessageAWS(text);
         this.push("messages", message);
-
-        
       }
     }
 

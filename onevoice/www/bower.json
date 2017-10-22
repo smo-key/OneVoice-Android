@@ -16,7 +16,8 @@
     "polymer": "Polymer/polymer#^2.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "paper-styles": "PolymerElements/paper-styles#2.0",
-    "paper-input": "PolymerElements/paper-input#2.0"
+    "paper-input": "PolymerElements/paper-input#2.0",
+    "aws-sdk": "aws-sdk-js#^2.138.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"
