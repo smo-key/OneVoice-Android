@@ -8,11 +8,25 @@
         display: block;
         @apply --font-main;
         font-size: 18px;
+        @apply --layout-horizontal;
+        @apply --layout-start-justified;
       }
+      div.emote {
+        color: var(--primary-color);
+        border-radius: 50%;
+        background-color: : white;
+        
+      }
+      paper-icon-button{
+        height: 60px;
+        width: 60px;
+      }
+
       div.message-container {
         border-radius: 8px 8px 8px 0;
         @apply --shadow-elevation-4dp;
-        width: calc(100% - 64px);
+        width: calc(100% - 84px);
+        margin-top: 8px;
       }
       div.message {
         position: relative;
@@ -37,7 +51,9 @@
         color: var(--grey-text);
       }
     </style>
-
+    <div class="emote">
+      <paper-icon-button icon="mdi:emoticon-happy" ></paper-icon-button>
+    </div>
     <div class="message-container">
       <div class="message">
         [[message.text]]
