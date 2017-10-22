@@ -17,10 +17,16 @@
       div.messages {
         display: block;
         padding: 15px;
+        margin-bottom: 66px;
+        overflow-y: scroll;
+      }
+      onevoice-bar {
+        position: fixed;
+        bottom: 0;
       }
     </style>
 
-    <div class="messages">
+    <div class="messages" id="messages">
       <template is="dom-repeat" items="{{messages}}" as="message">
         <onevoice-message message="{{message}}"></onevoice-message>
       </template>
@@ -41,9 +47,8 @@
             { from: "bot", icon: "mdi:emoticon-happy",
               text: "What are you looking for?",
               options: [
-              "Upgrade my phone plan",
-              "Gift for a friend",
-              "Good movies"
+              "Looking for a new laptop",
+              "Buy a new phone"
             ]},
             // { from: "user",
             //   text: "I want pie"
@@ -62,6 +67,7 @@
 
       _sendMessageAWS(text) {
         this.loading = true;
+        var div = this.$.messages;
         var self = this;
 
         var lexruntime = new AWS.LexRuntime({
@@ -71,8 +77,8 @@
         });
 
         var params = {
-          botAlias: 'OVBot', /* required */
-          botName: 'OneVoice', /* required */
+          botAlias: 'OneVoiceTwoAlias', /* required */
+          botName: 'oneVoiceTwo', /* required */
           contentType: 'text/plain; charset=utf-8', /* required */
           inputStream: text, /* required */
           userId: 'harsh1234', /* required */
@@ -86,8 +92,12 @@
             self.push("messages", {
               from: "bot",
               icon: "mdi:emoticon-sad",
-              text: "Sorry, can you repeat that?"
+              text: "Sorry, I didn't understand that. Try asking something else."
             });
+            setTimeout(() => {
+              console.log(div);
+              div.scrollTop = 50000;
+            }, 500);
           }
           else {
             self.set("loading", false);
@@ -102,22 +112,26 @@
             var options = [ ];
 
             do {
-                m = optRegex.exec(opts);
-                if (m) {
-                  console.log(m[0], opts)
-                  options.push(m[0].substring(1, m[0].length - 1))
-                  opts = opts.replace(m[0], "");
-                }
+              m = optRegex.exec(opts);
+              if (m) {
+                console.log(m[0], opts)
+                options.push(m[0].substring(1, m[0].length - 1))
+                opts = opts.replace(m[0], "");
+              }
             } while (m);
 
             //var text = data.message.
 
             self.push("messages", {
               from: "bot",
-              icon: "mdi:emoticon-sad",
+              icon: "mdi:emoticon-happy",
               text: text,
               options: options
             });
+            setTimeout(() => {
+              console.log(div);
+              div.scrollTop = 50000;
+            }, 500);
           }
         });
       }
@@ -129,14 +143,17 @@
         }
         console.log(message);
         if (this.messages.length > 0) {
-          var data = this.messages[this.messages.length - 1];
-          data.options = [ ];
-          this.pop("messages");
-          this.push("messages", data);
+          this.set("messages." + (this.messages.length - 1) + ".options", [ ]);
         }
 
         this._sendMessageAWS(text);
         this.push("messages", message);
+
+        var div = this.$.messages;
+        setTimeout(() => {
+          console.log(div);
+          div.scrollTop = 50000;
+        }, 500);
       }
     }
 

@@ -15,7 +15,7 @@
 
       paper-input {
         position: relative;
-        top: -6px;
+        top: -7px;
         height: 66px;
         --paper-input-container-underline: {
           border-color: transparent;
@@ -39,11 +39,17 @@
         color: white;
         border-radius: 50%;
         padding-right: 8px;
+        margin-right: 8px;
         --paper-icon-button-ink-color: white;
+      }
+
+      paper-icon-button.mic {
+        margin-right: 10px;
       }
 
       paper-icon-button.micoff {
         color: white;
+        margin-right: 10px;
         --paper-icon-button-ink-color: white;
       }
 
@@ -51,8 +57,13 @@
         @apply --layout-horizontal;
         @apply --layout-justified;
         @apply --layout-center;
-        padding: 0 15px;
+        padding: 0 8px;
         height: 66px;
+      }
+      div.left {
+        @apply --layout-horizontal;
+        @apply --layout-start-justified;
+        @apply --layout-center;
       }
 
       div.bar-container.listening {
@@ -65,22 +76,26 @@
       div.bar-container.listening span.parsing {
         opacity: 0.8;
       }
+      div.text {
+        width: 100%;
+      }
 
     </style>
 
     <div class="bar-container" hidden$="[[listening]]">
-      <paper-input placeholder="Enter Message" value="{{text}}" on-keypress="_keyPressed">
-      </paper-input>
+      <div class="left">
+        <paper-icon-button icon="mdi:microphone" on-tap="_changeListen" class="mic"></paper-icon-button>
+        <paper-input placeholder="Enter Message" value="{{text}}" on-keypress="_keyPressed"></paper-input>
+      </div>
       <div class="right">
-        <paper-icon-button icon="mdi:microphone" on-tap="_changeListen"></paper-icon-button>
-        <paper-icon-button icon="mdi:telegram" class="send" on-tap="_submitSend"></paper-icon-button>
+        <paper-icon-button icon="mdi:telegram" on-tap="_submitSend" class="send"></paper-icon-button>
       </div>
     </div>
     <div class="bar-container listening" hidden$="[[!listening]]">
-      <div class="text">[[text]] <span class="parsing">[[textParsing]]</span></div>
-      <div class="right">
+      <div class="left">
         <paper-icon-button class="micoff" icon="mdi:microphone-off" on-tap="_changeListen"></paper-icon-button>
       </div>
+      <div class="text">[[text]] <span class="parsing">[[textParsing]]</span></div>
     </div>
 
   </template>

@@ -71,13 +71,21 @@
         @apply --layout-vertical;
         font-size: 16px;
       }
-      div.options > span {
-        padding: 1px 0;
+      div.options > * {
+        padding: 4px 0;
       }
-      div.options > span.head {
+      div.options > .head {
         color: var(--grey-text);
         padding-top: 6px;
         /*font-size: 18px;*/
+      }
+      div.options > paper-button {
+        text-transform: none;
+        text-align: left;
+        @apply --layout-horizontal;
+        @apply --layout-start-justified;
+        font-family: "Roboto Condensed";
+        margin: 0;
       }
 
     </style>
@@ -90,9 +98,9 @@
           [[message.text]]
         </div>
         <div class="options" hidden$="[[!_hasItemsArray(message.options)]]">
-          <span class="head">Try:</span>
+          <div class="head">Try:</div>
           <template is="dom-repeat" items="[[message.options]]" as="option">
-            <span>[[option]]</span>
+            <paper-button on-tap="_clickOption" id="[[option]]">[[option]]</paper-button>
           </template>
         </div>
       </div>
@@ -107,6 +115,13 @@
         return {
           message: { type: Object, reflectToAttribute: true }
         }
+      }
+
+      _clickOption(e) {
+        var text = e.target.getAttribute("id");
+        console.log("CLICK", text);
+
+        this.dispatchEvent(new CustomEvent('send-text', {detail: text, bubbles: true, composed: true}));
       }
 
       _hasItemsArray(obj) {
